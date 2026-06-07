@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Plantex - Home</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
+    <style>
+        .navbar-custom {
+            background-color: #28a745; /* Green color for agriculture theme */
+        }
+        .footer-custom {
+            background-color: #28a745;
+            color: white;
+            text-align: center;
+            padding: 10px 0;
+            position: fixed;
+            width: 100%;
+            bottom: 0;
+            left: 0;
+        }
+        .container {
+            margin-top: 50px;
+        }
+        .option-card {
+            background: #f8f9fa;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s;
+        }
+        .option-card:hover {
+            transform: scale(1.05);
+        }
+        .about{
+        margin-bottom: 50px;
+        }
+        .logo{
+        font-size: 10px;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light navbar-custom">
+        <div class="container">
+            <a class="navbar-brand text-white" href="#">
+                <i class="fas fa-leaf"></i> Plantex
+            </a>
+        </div>
+    </nav>
+    
+    <div class="container text-center">
+        <h1 class="mt-4">Welcome to Plantex</h1>
+        <p class="lead">Select an option to get started:</p>
+        
+        <div class="row mt-4">
+            <div class="col-md-6 mb-4">
+                <a href="/crop-recommendation" class="text-decoration-none">
+                    <div class="option-card">
+                        <i class="fas fa-seedling fa-3x text-success"></i>
+                        <h4 class="mt-3">Crop Recommendation</h4>
+                        <p>Find the best crop to grow based on soil conditions.</p>
+                    </div>
+                </a>
+            </div>
+            <div class="col-md-6 mb-4">
+                <a href="/leaf-disease" class="text-decoration-none">
+                    <div class="option-card">
+                        <i class="fas fa-virus fa-3x text-danger"></i>
+                        <h4 class="mt-3">Leaf Disease Detection</h4>
+                        <p>Upload a leaf image to detect plant diseases.</p>
+                    </div>
+                </a>
+            </div>
+            <div class="container text-center">
+                <div class="mt-4">
+                    <div class="about">
+                        <h1 style="margin-bottom: 50px">About Us</h1>
+                        <p style="line-height: 200%">Welcome to PLANTEX, your ultimate companion in smart gardening and plant care! Our platform leverages the power of IoT and Machine Learning to provide intelligent plant recommendations and leaf disease detection, ensuring that your plants thrive in any environment.
+
+At PLANTEX, we aim to bridge the gap between technology and nature by offering data-driven insights to plant enthusiasts, farmers, and researchers. Our system analyzes environmental factors and plant health using IoT sensors while employing cutting-edge AI models to detect diseases early. This helps users make informed decisions, reduce crop loss, and maintain healthier plants effortlessly.
+
+Join us on our mission to revolutionize plant care with innovation and technology. Whether you are a beginner or an expert gardener, PLANTEX is here to help your plants grow better and stronger!</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <footer class="footer-custom mt-4">
+        <b>Plantex - Smart Agriculture Solutions</b>
+    </footer>
+    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

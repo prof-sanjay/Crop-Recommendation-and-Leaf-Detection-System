@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prediction Result</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
+    <style>
+        .navbar-custom {
+            background-color: #28a745;
+        }
+        .footer-custom {
+            background-color: #28a745;
+            color: white;
+            text-align: center;
+            padding: 10px 0;
+            position: fixed;
+            width: 100%;
+            bottom: 0;
+            left: 0;
+        }
+        .card-custom {
+            max-width: 500px;
+            margin: auto;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        .result-img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 10px;
+        }
+        .btn-home {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body class="bg-light">
+
+    <nav class="navbar navbar-expand-lg navbar-light navbar-custom">
+        <div class="container">
+            <a class="navbar-brand text-white" href="#"><i class="fas fa-leaf"></i> Plantex</a>
+        </div>
+    </nav>
+
+    <div class="container mt-5 text-center">
+        <h2 class="mb-3">Prediction Result</h2>
+
+        {% if error %}
+            <div class="alert alert-danger">{{ error }}</div>
+        {% else %}
+            <div class="card card-custom bg-white">
+                <h4 class="mb-3 text-success"><i class="fas fa-seedling"></i> Disease Detected:</h4>
+                <h3 class="text-danger"><b>{{ result }}</b></h3>
+                <img src="{{ url_for('static', filename='uploads/' + image_path) }}" class="result-img mt-3" alt="Uploaded Leaf">
+                <a href="/mainpage" class="btn btn-primary btn-home">Back to Home</a>
+            </div>
+        {% endif %}
+    </div>
+
+    <footer class="footer-custom mt-5">
+        <b>Plantex - Smart Agriculture Solutions</b>
+    </footer>
+
+</body>
+</html>

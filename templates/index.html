@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Plant Disease Classification</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
+    <style>
+        .navbar-custom {
+            background-color: #28a745; /* Green color for agriculture theme */
+        }
+        .footer-custom {
+            background-color: #28a745;
+            color: white;
+            text-align: center;
+            padding: 10px 0;
+            position: fixed;
+            width: 100%;
+            bottom: 0;
+            left: 0;
+        }
+        .container {
+            margin-top: 50px;
+        }
+        .upload-box {
+            background: #f8f9fa;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light navbar-custom">
+        <div class="container">
+            <a class="navbar-brand text-white" href="/mainpage">
+                <i class="fas fa-home"></i> Home
+            </a>
+        </div>
+    </nav>
+    
+    <div class="container text-center">
+        <h2 class="mt-4">Leaf Disease Detection</h2>
+        <div class="upload-box mt-4">
+            <form action="/predict" method="post" enctype="multipart/form-data">
+                <div class="form-group">
+                    <input type="file" class="form-control-file" name="file" required>
+                </div>
+                <button type="submit" class="btn btn-success">Upload & Predict</button>
+            </form>
+        </div>
+    </div>
+    
+    <footer class="footer-custom mt-4">
+        <b>Plantex - Smart Agriculture Solutions</b>
+    </footer>
+    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
