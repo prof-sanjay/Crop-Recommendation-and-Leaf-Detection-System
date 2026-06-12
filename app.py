@@ -1,4 +1,5 @@
 from flask import Flask, render_template, request, redirect, url_for, jsonify
+from pymongo.errors import DuplicateKeyError
 from flask_bcrypt import Bcrypt
 from flask_pymongo import PyMongo
 from flask_login import LoginManager, UserMixin, login_user, logout_user, login_required
@@ -25,17 +26,19 @@ with open('RandomForest.pkl', 'rb') as model_file:
 UPLOAD_FOLDER = os.path.join(os.path.dirname(__file__), 'static', 'uploads')
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
-MODEL_PATH = os.environ.get('MODEL_PATH', 'VGG_PV.h5')
+MODEL_URL = os.environ.get('MODEL_URL')
+MODEL_PATH = os.environ.get('MODEL_PATH', '/tmp/VGG_PV.h5' if MODEL_URL else 'VGG_PV.h5')
 _vgg_model = None
 
 
 def get_vgg_model():
     global _vgg_model
     if _vgg_model is None:
-        model_url = os.environ.get('MODEL_URL')
-        if model_url and not os.path.exists(MODEL_PATH):
+        if MODEL_URL and not os.path.exists(MODEL_PATH):
             import urllib.request
-            urllib.request.urlretrieve(model_url, MODEL_PATH)
+            print(f"Downloading model from HuggingFace to {MODEL_PATH}...")
+            urllib.request.urlretrieve(MODEL_URL, MODEL_PATH)
+            print("Model download complete.")
 
         from tensorflow.keras.applications import VGG16
         from tensorflow.keras.models import Model
@@ -106,6 +109,51 @@ def mainpage():
 def logout():
     logout_user()
     return redirect(url_for('login'))
+
+
+@app.route('/profile', methods=['GET', 'POST'])
+@login_required
+def profile():
+    if request.method == 'POST':
+        action = request.form.get('action')
+
+        if action == 'change_username':
+            new_username = request.form.get('new_username', '').strip()
+            if not new_username:
+                return render_template('profile.html', error_username='Username cannot be empty.')
+            if new_username == current_user.id:
+                return render_template('profile.html', error_username='New username is the same as current.')
+            if mongo.db.users.find_one({'_id': new_username}):
+                return render_template('profile.html', error_username='Username already taken. Please choose another.')
+            try:
+                user_data = mongo.db.users.find_one({'_id': current_user.id})
+                mongo.db.users.insert_one({
+                    '_id': new_username,
+                    'password': user_data['password'],
+                    'usermaild': user_data.get('usermaild', '')
+                })
+                mongo.db.users.delete_one({'_id': current_user.id})
+                login_user(User(new_username))
+                return render_template('profile.html', success_username='Username updated successfully.')
+            except DuplicateKeyError:
+                return render_template('profile.html', error_username='Username already taken. Please choose another.')
+
+        elif action == 'change_password':
+            current_password = request.form.get('current_password', '')
+            new_password = request.form.get('new_password', '')
+            confirm_password = request.form.get('confirm_password', '')
+            user_data = mongo.db.users.find_one({'_id': current_user.id})
+            if not bcrypt.check_password_hash(user_data['password'], current_password):
+                return render_template('profile.html', error_password='Current password is incorrect.')
+            if len(new_password) < 6:
+                return render_template('profile.html', error_password='New password must be at least 6 characters.')
+            if new_password != confirm_password:
+                return render_template('profile.html', error_password='Passwords do not match.')
+            hashed = bcrypt.generate_password_hash(new_password).decode('utf-8')
+            mongo.db.users.update_one({'_id': current_user.id}, {'$set': {'password': hashed}})
+            return render_template('profile.html', success_password='Password updated successfully.')
+
+    return render_template('profile.html')
 
 
 @app.route('/crop-recommendation', methods=['GET'])

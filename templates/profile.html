@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile — Plantex</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * { font-family: 'Poppins', sans-serif; }
+        body { background: #f4faf6; min-height: 100vh; display: flex; flex-direction: column; }
+
+        .navbar { background: linear-gradient(135deg, #1b4332, #2d6a4f); padding: 14px 0; box-shadow: 0 2px 12px rgba(0,0,0,0.15); }
+        .navbar-brand { font-size: 1.4rem; font-weight: 700; color: white !important; }
+        .navbar-brand i { color: #95d5b2; margin-right: 8px; }
+        .btn-nav {
+            background: rgba(255,255,255,0.12); color: white;
+            border: 1.5px solid rgba(255,255,255,0.3); border-radius: 8px;
+            padding: 6px 16px; font-size: 0.85rem; font-weight: 500;
+            text-decoration: none; transition: all 0.2s; margin-left: 8px;
+        }
+        .btn-nav:hover { background: rgba(255,255,255,0.22); color: white; }
+        .profile-badge {
+            width: 36px; height: 36px;
+            background: rgba(255,255,255,0.2);
+            border: 2px solid rgba(255,255,255,0.5);
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            color: white; font-weight: 700; font-size: 0.88rem;
+            text-decoration: none; transition: all 0.2s; margin-left: 8px;
+        }
+        .profile-badge:hover { background: rgba(255,255,255,0.32); color: white; }
+        .profile-badge.active { background: rgba(255,255,255,0.35); border-color: white; }
+
+        main { flex-grow: 1; padding: 48px 0; }
+
+        .avatar-circle {
+            width: 88px; height: 88px; border-radius: 50%;
+            background: linear-gradient(135deg, #2d6a4f, #52b788);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 2.4rem; font-weight: 700; color: white;
+            margin: 0 auto 14px;
+            box-shadow: 0 6px 20px rgba(45,106,79,0.3);
+        }
+        .username-display { font-size: 1.2rem; font-weight: 700; color: #1b4332; margin-bottom: 4px; }
+        .username-label { font-size: 0.82rem; color: #868e96; }
+
+        .section-card {
+            background: white; border-radius: 16px;
+            padding: 32px 36px;
+            box-shadow: 0 4px 24px rgba(45,106,79,0.07);
+            border: 1.5px solid #e6f4ec;
+            margin-bottom: 20px;
+        }
+        .section-title {
+            font-size: 1rem; font-weight: 600; color: #1b4332;
+            margin-bottom: 20px; display: flex; align-items: center; gap: 10px;
+        }
+        .section-title i { color: #52b788; }
+
+        .form-label { font-size: 0.84rem; font-weight: 500; color: #495057; margin-bottom: 5px; }
+        .input-group-text {
+            border-radius: 10px 0 0 10px; background: #f8f9fa;
+            border: 1.5px solid #dee2e6; border-right: none; color: #6c757d;
+        }
+        .form-control {
+            border-radius: 0 10px 10px 0; padding: 10px 14px;
+            border: 1.5px solid #dee2e6; border-left: none; font-size: 0.9rem;
+        }
+        .form-control:focus { border-color: #52b788; box-shadow: 0 0 0 3px rgba(82,183,136,0.15); }
+        .input-group:focus-within .input-group-text { border-color: #52b788; }
+
+        .btn-save {
+            border-radius: 10px; padding: 10px 24px;
+            font-weight: 600; font-size: 0.88rem;
+            border: none; transition: all 0.25s; color: white;
+        }
+        .btn-save-green { background: linear-gradient(135deg, #2d6a4f, #52b788); }
+        .btn-save-green:hover {
+            background: linear-gradient(135deg, #1b4332, #2d6a4f); color: white;
+            transform: translateY(-1px); box-shadow: 0 4px 14px rgba(45,106,79,0.35);
+        }
+        .btn-save-blue { background: linear-gradient(135deg, #2563eb, #60a5fa); }
+        .btn-save-blue:hover {
+            background: linear-gradient(135deg, #1d4ed8, #3b82f6); color: white;
+            transform: translateY(-1px); box-shadow: 0 4px 14px rgba(37,99,235,0.3);
+        }
+        .alert { border-radius: 10px; font-size: 0.86rem; padding: 10px 14px; }
+
+        footer { background: #1b4332; color: rgba(255,255,255,0.55); text-align: center; padding: 16px; font-size: 0.81rem; }
+        footer span { color: rgba(255,255,255,0.88); font-weight: 600; }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg">
+        <div class="container">
+            <a class="navbar-brand" href="/mainpage">
+                <i class="fas fa-seedling"></i>Plantex
+            </a>
+            <div class="ms-auto d-flex align-items-center">
+                <a href="{{ url_for('mainpage') }}" class="btn-nav"><i class="fas fa-home me-1"></i>Home</a>
+                <a href="{{ url_for('logout') }}" class="btn-nav"><i class="fas fa-sign-out-alt me-1"></i>Logout</a>
+                <a href="{{ url_for('profile') }}" class="profile-badge active" title="{{ current_user.id }}">
+                    {{ current_user.id[0].upper() }}
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <main>
+        <div class="container" style="max-width: 560px;">
+
+            <!-- Avatar -->
+            <div class="text-center mb-4">
+                <div class="avatar-circle">{{ current_user.id[0].upper() }}</div>
+                <div class="username-display">{{ current_user.id }}</div>
+                <div class="username-label">Plantex Member</div>
+            </div>
+
+            <!-- Change Username -->
+            <div class="section-card">
+                <div class="section-title">
+                    <i class="fas fa-user-edit"></i> Change Username
+                </div>
+
+                {% if error_username %}
+                <div class="alert alert-danger"><i class="fas fa-exclamation-circle me-2"></i>{{ error_username }}</div>
+                {% endif %}
+                {% if success_username %}
+                <div class="alert alert-success"><i class="fas fa-check-circle me-2"></i>{{ success_username }}</div>
+                {% endif %}
+
+                <form method="POST">
+                    <input type="hidden" name="action" value="change_username">
+                    <div class="mb-3">
+                        <label class="form-label">Current Username</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="fas fa-user fa-sm"></i></span>
+                            <input type="text" class="form-control" value="{{ current_user.id }}" disabled>
+                        </div>
+                    </div>
+                    <div class="mb-4">
+                        <label class="form-label">New Username</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="fas fa-pen fa-sm"></i></span>
+                            <input type="text" name="new_username" class="form-control" placeholder="Choose a new username" required>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-save btn-save-green">
+                        <i class="fas fa-save me-2"></i>Update Username
+                    </button>
+                </form>
+            </div>
+
+            <!-- Change Password -->
+            <div class="section-card">
+                <div class="section-title">
+                    <i class="fas fa-lock"></i> Change Password
+                </div>
+
+                {% if error_password %}
+                <div class="alert alert-danger"><i class="fas fa-exclamation-circle me-2"></i>{{ error_password }}</div>
+                {% endif %}
+                {% if success_password %}
+                <div class="alert alert-success"><i class="fas fa-check-circle me-2"></i>{{ success_password }}</div>
+                {% endif %}
+
+                <form method="POST">
+                    <input type="hidden" name="action" value="change_password">
+                    <div class="mb-3">
+                        <label class="form-label">Current Password</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="fas fa-lock fa-sm"></i></span>
+                            <input type="password" name="current_password" class="form-control" placeholder="Enter current password" required>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">New Password</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="fas fa-key fa-sm"></i></span>
+                            <input type="password" name="new_password" class="form-control" placeholder="At least 6 characters" required>
+                        </div>
+                    </div>
+                    <div class="mb-4">
+                        <label class="form-label">Confirm New Password</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="fas fa-check fa-sm"></i></span>
+                            <input type="password" name="confirm_password" class="form-control" placeholder="Repeat new password" required>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-save btn-save-blue">
+                        <i class="fas fa-shield-alt me-2"></i>Update Password
+                    </button>
+                </form>
+            </div>
+
+        </div>
+    </main>
+
+    <footer>© 2024 <span>Plantex</span> — Smart Farming with IoT &amp; Machine Learning</footer>
+</body>
+</html>

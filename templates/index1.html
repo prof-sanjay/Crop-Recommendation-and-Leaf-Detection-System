@@ -21,6 +21,16 @@
             text-decoration: none; transition: all 0.2s; margin-left: 8px;
         }
         .btn-nav:hover { background: rgba(255,255,255,0.22); color: white; }
+        .profile-badge {
+            width: 36px; height: 36px;
+            background: rgba(255,255,255,0.2);
+            border: 2px solid rgba(255,255,255,0.5);
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            color: white; font-weight: 700; font-size: 0.88rem;
+            text-decoration: none; transition: all 0.2s; margin-left: 8px;
+        }
+        .profile-badge:hover { background: rgba(255,255,255,0.32); color: white; }
 
         main { flex-grow: 1; padding: 48px 0; }
 
@@ -86,9 +96,12 @@
             <a class="navbar-brand" href="/mainpage">
                 <i class="fas fa-seedling"></i>Plantex
             </a>
-            <div class="ms-auto">
+            <div class="ms-auto d-flex align-items-center">
                 <a href="{{ url_for('mainpage') }}" class="btn-nav"><i class="fas fa-home me-1"></i>Home</a>
                 <a href="{{ url_for('logout') }}" class="btn-nav"><i class="fas fa-sign-out-alt me-1"></i>Logout</a>
+                <a href="{{ url_for('profile') }}" class="profile-badge" title="{{ current_user.id }}">
+                    {{ current_user.id[0].upper() }}
+                </a>
             </div>
         </div>
     </nav>
