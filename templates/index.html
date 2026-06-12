@@ -3,61 +3,152 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Plant Disease Classification</title>
-    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
+    <title>Leaf Disease Detection — Plantex</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        .navbar-custom {
-            background-color: #28a745; /* Green color for agriculture theme */
+        * { font-family: 'Poppins', sans-serif; }
+        body { background: #f4faf6; min-height: 100vh; display: flex; flex-direction: column; }
+
+        .navbar { background: linear-gradient(135deg, #1b4332, #2d6a4f); padding: 14px 0; box-shadow: 0 2px 12px rgba(0,0,0,0.15); }
+        .navbar-brand { font-size: 1.4rem; font-weight: 700; color: white !important; }
+        .navbar-brand i { color: #95d5b2; margin-right: 8px; }
+        .btn-back {
+            background: rgba(255,255,255,0.12); color: white;
+            border: 1.5px solid rgba(255,255,255,0.3); border-radius: 8px;
+            padding: 6px 16px; font-size: 0.85rem; font-weight: 500;
+            text-decoration: none; transition: all 0.2s;
         }
-        .footer-custom {
-            background-color: #28a745;
-            color: white;
+        .btn-back:hover { background: rgba(255,255,255,0.22); color: white; }
+
+        main { flex-grow: 1; display: flex; align-items: center; padding: 48px 0; }
+
+        .page-card {
+            background: white; border-radius: 20px;
+            padding: 48px 44px; max-width: 520px; width: 100%;
+            box-shadow: 0 8px 40px rgba(45,106,79,0.1);
+            border: 1.5px solid #e6f4ec;
+            margin: 0 auto;
+        }
+        .page-icon {
+            width: 70px; height: 70px; border-radius: 50%;
+            background: linear-gradient(135deg, #dbeafe, #93c5fd);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.7rem; color: #1e40af;
+            margin: 0 auto 20px;
+        }
+        h2 { font-size: 1.45rem; font-weight: 700; color: #1b4332; margin-bottom: 6px; }
+        .subtitle { font-size: 0.87rem; color: #6c757d; margin-bottom: 30px; line-height: 1.6; }
+
+        .upload-area {
+            border: 2px dashed #b7e4c7;
+            border-radius: 14px;
+            padding: 36px 20px;
             text-align: center;
-            padding: 10px 0;
-            position: fixed;
-            width: 100%;
-            bottom: 0;
-            left: 0;
+            background: #f8fdf9;
+            cursor: pointer;
+            transition: all 0.25s;
+            margin-bottom: 20px;
         }
-        .container {
-            margin-top: 50px;
+        .upload-area:hover, .upload-area.drag-over {
+            border-color: #52b788;
+            background: #edf7f0;
         }
-        .upload-box {
-            background: #f8f9fa;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        .upload-area i { font-size: 2.2rem; color: #52b788; margin-bottom: 10px; }
+        .upload-area p { font-size: 0.88rem; color: #6c757d; margin: 0; }
+        .upload-area span { font-size: 0.82rem; color: #adb5bd; }
+
+        #file-input { display: none; }
+        #preview-wrap { display: none; margin-bottom: 20px; text-align: center; }
+        #preview-img { max-height: 180px; border-radius: 12px; border: 1.5px solid #e6f4ec; box-shadow: 0 4px 12px rgba(0,0,0,0.07); }
+        #preview-name { font-size: 0.82rem; color: #6c757d; margin-top: 8px; }
+
+        .btn-analyse {
+            background: linear-gradient(135deg, #2563eb, #60a5fa);
+            color: white; border: none; border-radius: 10px;
+            padding: 12px; font-weight: 600; font-size: 0.92rem;
+            transition: all 0.25s; width: 100%;
         }
+        .btn-analyse:hover {
+            background: linear-gradient(135deg, #1d4ed8, #3b82f6); color: white;
+            transform: translateY(-1px); box-shadow: 0 6px 18px rgba(37,99,235,0.35);
+        }
+        .btn-analyse:disabled { background: #adb5bd; cursor: not-allowed; transform: none; box-shadow: none; }
+
+        footer { background: #1b4332; color: rgba(255,255,255,0.55); text-align: center; padding: 16px; font-size: 0.81rem; }
+        footer span { color: rgba(255,255,255,0.88); font-weight: 600; }
     </style>
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-light navbar-custom">
+    <nav class="navbar navbar-expand-lg">
         <div class="container">
-            <a class="navbar-brand text-white" href="/mainpage">
-                <i class="fas fa-home"></i> Home
+            <a class="navbar-brand" href="/mainpage">
+                <i class="fas fa-seedling"></i>Plantex
+            </a>
+            <a href="{{ url_for('mainpage') }}" class="btn-back ms-auto">
+                <i class="fas fa-arrow-left me-1"></i>Back
             </a>
         </div>
     </nav>
-    
-    <div class="container text-center">
-        <h2 class="mt-4">Leaf Disease Detection</h2>
-        <div class="upload-box mt-4">
-            <form action="/predict" method="post" enctype="multipart/form-data">
-                <div class="form-group">
-                    <input type="file" class="form-control-file" name="file" required>
-                </div>
-                <button type="submit" class="btn btn-success">Upload & Predict</button>
-            </form>
+
+    <main>
+        <div class="container">
+            <div class="page-card text-center">
+                <div class="page-icon"><i class="fas fa-microscope"></i></div>
+                <h2>Leaf Disease Detection</h2>
+                <p class="subtitle">Upload a clear photo of your crop's leaf. Our AI model will identify any disease from 38 categories.</p>
+
+                <form action="{{ url_for('upload') }}" method="POST" enctype="multipart/form-data" id="upload-form">
+                    <div class="upload-area" id="upload-area" onclick="document.getElementById('file-input').click()">
+                        <i class="fas fa-cloud-upload-alt"></i>
+                        <p>Click to browse or drag &amp; drop your image</p>
+                        <span>Supports JPG, PNG, JPEG</span>
+                    </div>
+                    <input type="file" name="file" id="file-input" accept="image/*" required>
+
+                    <div id="preview-wrap">
+                        <img id="preview-img" src="#" alt="Preview">
+                        <p id="preview-name"></p>
+                    </div>
+
+                    <button type="submit" class="btn-analyse" id="submit-btn" disabled>
+                        <i class="fas fa-search me-2"></i>Analyse Leaf
+                    </button>
+                </form>
+            </div>
         </div>
-    </div>
-    
-    <footer class="footer-custom mt-4">
-        <b>Plantex - Smart Agriculture Solutions</b>
-    </footer>
-    
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    </main>
+
+    <footer>© 2024 <span>Plantex</span> — Smart Farming with IoT &amp; Machine Learning</footer>
+
+    <script>
+        const input = document.getElementById('file-input');
+        const area = document.getElementById('upload-area');
+        const previewWrap = document.getElementById('preview-wrap');
+        const previewImg = document.getElementById('preview-img');
+        const previewName = document.getElementById('preview-name');
+        const submitBtn = document.getElementById('submit-btn');
+
+        input.addEventListener('change', function () {
+            if (this.files && this.files[0]) {
+                const file = this.files[0];
+                previewImg.src = URL.createObjectURL(file);
+                previewName.textContent = file.name;
+                previewWrap.style.display = 'block';
+                area.style.display = 'none';
+                submitBtn.disabled = false;
+            }
+        });
+
+        area.addEventListener('dragover', e => { e.preventDefault(); area.classList.add('drag-over'); });
+        area.addEventListener('dragleave', () => area.classList.remove('drag-over'));
+        area.addEventListener('drop', e => {
+            e.preventDefault();
+            area.classList.remove('drag-over');
+            input.files = e.dataTransfer.files;
+            input.dispatchEvent(new Event('change'));
+        });
+    </script>
 </body>
 </html>

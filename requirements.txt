@@ -1,0 +1,12 @@
+flask
+flask-bcrypt
+flask-pymongo
+flask-login
+numpy
+pyserial
+tensorflow-cpu
+scikit-learn
+werkzeug
+python-dotenv
+pymongo
+gunicorn
